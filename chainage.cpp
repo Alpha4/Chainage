@@ -73,6 +73,7 @@ namespace chainage
 	}
 	Maillon* recherche(Chainage ch, int x)
 	{
+		
 	}
 	void finalisation(Chainage & ch)
 	{
