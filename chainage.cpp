@@ -73,8 +73,15 @@ namespace chainage
 	}
 	Maillon* recherche(Chainage ch, int x)
 	{
-		
+		Maillon * res = new Maillon;
+		res=ch.tete;
+		While (res != NULL && res->elt != x)
+		{
+			res=res->succ;
+		}
+		return res;
 	}
+	
 	void finalisation(Chainage & ch)
 	{
 	}
