@@ -81,7 +81,20 @@ namespace chainage
 		}
 		return res;
 	}
-	
+	void afficheInverse(Chainage ch)
+	{
+		afficheRec(ch.tete)
+	}
+	void afficheRec(Maillon * pm)
+	{
+		if (pm != NULL)
+		{
+			afficheRec(pm->succ);
+			cout << " | " << pm->elt;
+		}
+		cout << " |" << endl;
+	}
+	void reinitialisation(
 	void finalisation(Chainage & ch)
 	{
 	}
