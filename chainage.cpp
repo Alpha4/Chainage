@@ -1,5 +1,3 @@
-// Bibliothèque permettant l'utilisation des chainages simples
-
 #include <iostream>
 namespace chainage
 {
@@ -20,173 +18,81 @@ namespace chainage
 			Maillon * queue;
 		}Chainage;
 	
-	/***************************************/
-	//Fonction d'initialisation du chainage
+	
 	void initialisation(Chainage & ch)
 	{
 		cout << "Combien de maillons souhaitez vous créer ?" << endl;
 		cin >> ch.nb_elt;
-		Maillon * pred;
-		if (ch.nb_elt!=0)
+		Maillon *pred;
+		for (int i = 0; i<ch.nb_elt; i++)
 		{
-			for (int i = 0; i<ch.nb_elt; i++)
+			int elt;
+			Maillon *pm= new Maillon;
+			cin >> elt;
+			pm->elt=elt;
+			if (i==0)
 			{
-				int elt;
-				Maillon * pm= new Maillon; // Allocation du nouveau maillon
-				cout  << "Elément du maillon " << (i+1) << " : " ;
-				cin >> elt; //Récupération de l'élément
-				pm->elt=elt; 
-				
-				if (i==0) // cas du premier maillon
-				{
-					ch.tete=&*pm; // mise à jour de la tête
-				}
-				else if (i==ch.nb_elt-1) // cas du dernier maillon
-				{
-					ch.queue=&*pm; //mise à jour de la queue
-					pred->succ=&*pm; // cas global nécessaire
-				}
-				else  // cas global
-				{
-					pred->succ=&*pm; // le pointeur succ du précédent maillon 	initialisé est mis à jour avec le pointeur pm
-				}
-				pred=&*pm; // on stocke le pointeur du maillon créé pour mettre à jour son successeur au passage suivant dnas la boucle.
+				ch.tete=&*pm;
 			}
+			else if (i==ch.nb_elt-1)
+			{
+				ch.queue=&*pm;
+				pred->succ=&*pm;
+			}
+			else
+			{
+				pred->succ=&*pm;
+			}
+			pred=&*pm;
 		}
-		else
-		{
-			ch.tete=NULL;
-			ch.queue=NULL;
-		}
-		cout << "Initialisation effectuée." << endl;
+		cout << "Initialisation effectuee." << endl;
 	}
-	
-	/***************************************/
-	//Fonction d'affichage classique du chainage
-	void affichage(Chainage ch)
+	void affichage(Chainage & ch)
 	{
-		int pos=1; //position
-		while (pos<ch.nb_elt+1) // On parcourt la chaine en partant de la tête
-			{
-				cout << " | " << pos;
-				pos=pos+1;
-			}
-		cout << " |" << endl;
-		if (ch.tete==NULL) // Vérification que le chainage n'est pas vide
+		if (ch.tete==NULL)
 		{
 			cout << "Le chaînage est vide" << endl;
 		}
 		else
 		{
-			Maillon * pm; // Allocation d'un pointeur pour parcourir et afficher les différents maillons
-			pm=ch.tete; // On l'initialise en tête du chainage
-			while (pm != NULL) // On parcourt la chaine en partant de la tête
+			Maillon * pm;
+			pm=ch.tete;
+			while (pm != NULL)
 			{
-				cout << " | " << pm->elt; // On affiche l'élément
-				pm=pm->succ; // Puis on passe au suivant
+				cout << " | " << pm->elt;
+				pm=pm->succ;
 			}
-			cout << " |"<< endl;
+			cout << " |" << endl;
 		}
 	}
-	
-	/***************************************/
-	/*Cette fonction va nous permettre de convertir une position donnée par l'utilisateur en pointeur vers le maillon correspondant.
-	Elle est utilisée dans les procédures insertion, suppression, recherche
-	*/
-	
-	Maillon * conversion(Chainage ch,int pos)
+	void insertion(Chainage & ch, int pos, int elt)
 	{
-		Maillon * pm; // Allocation d'un pointeur vers maillon
-		pm=ch.tete; // Initialisation au maillon de tete
-		for (int i = 1; i<pos; i++) // On parcourt jusqu'au maillon correspondant
-		{
-			pm=pm->succ;
-		}
-		return pm; // On renvoie l'adresse du maillon correspondant à la position
 	}
-	
-	/***************************************/
-	// Cette fonction insert un élément après la position donnée
-	void insertion(Chainage & ch, int elem, int pos)
-	{
-		Maillon * nouveau=new Maillon; // Allocation du nouveau maillon
-		nouveau->elt=elem; // Récupération de l'élément dans le maillon
-		if (pos==0) // Insertion en tête
-		{
-			nouveau->succ=ch.tete;
-			ch.tete=nouveau;
-		}
-		else
-		{
-			Maillon * pm; //Allocation d'un nouveau pointeur
-			pm=conversion(ch,pos);
-			nouveau->succ=pm->succ;
-			pm->succ=nouveau;
-		}
-		ch.nb_elt=ch.nb_elt+1;
-	}
-	
-	/***************************************/
-	//Fonction de suppression du maillon à la position donnée
 	void suppression(Chainage &  ch, int pos)
 	{
-		
-		Maillon * pm;
-		if(pos==1) //suppression en tête
-		{
-			pm=ch.tete;
-			ch.tete=ch.tete->succ;
-		}
-		else
-		{
-			Maillon * pred=conversion(ch,pos-1);
-			pm=pred->succ;
-			pred->succ=pm->succ;
-			
-		}
-		delete pm;
-		ch.nb_elt-=1;	
 	}
-	
-	/***************************************/
-	// Insertion en tête
-	void insertTete(Chainage & ch, int elt)
+	void insertTete(Chainage & ch, int elt) // Insertion en tête
 	{
-		insertion(ch,elt,0);
+		insertion(ch, 0, elt);
 	}
-	
-	/***************************************/
-	// Insertion en queue
-	void insertQueue(Chainage & ch, int elt)
+	void insertQueue(Chainage & ch, int elt) // Insertion en queue
 	{
-		insertion(ch, ch.nb_elt, elt);
+		insertion(ch, nb_elt, elt);
 	}
-	
-	/***************************************/
-	// Suppression en tête
-	void supprTete(Chainage & ch)
+	void supprTete(Chainage & ch) // Suppression en tête
 	{
-		suppression(ch,1);
+		suppression(ch, 0);
 	}
-	
-	/***************************************/
-	// Suppression en queue
-	void supprQueue(Chainage & ch)
+	void supprQueue(Chainage & ch) // Suppression en queue
 	{
-		suppression(ch,ch.nb_elt);
+		suppression(ch, nb_elt);
 	}
-	
-	/***************************************/
-	// Fonction qui renvoie un pointeur vers le dernier maillon
-	Maillon* Queue(Chainage ch)
+	Maillon* Queue(Chainage ch) // Fonction qui renvoie un pointeur vers le dernier maillon
 	{
 		Maillon * pm;
 		pm=ch.queue;
 		return (pm);
 	}
-	
-	/***************************************/
-	//Fonction renvoyant le premier maillon dans lequel se situe l'élément donné
 	Maillon* recherche(Chainage ch, int x)
 	{
 		Maillon * res = new Maillon;
@@ -197,9 +103,10 @@ namespace chainage
 		}
 		return res;
 	}
-	
-	/***************************************/
-	//Fonction récursive d'affichage inverse à partir d'un maillon
+	void afficheInverse(Chainage ch)
+	{
+		afficheRec(ch.tete);
+	}
 	void afficheRec(Maillon * pm)
 	{
 		if (pm != NULL)
@@ -209,16 +116,6 @@ namespace chainage
 		}
 		cout << " |" << endl;
 	}
-	
-	/***************************************/
-	//Fonction d'affichage inverse
-	void afficheInverse(Chainage ch)
-	{
-		afficheRec(ch.tete);
-	}
-	
-	/***************************************/
-	//Fonction de reinitialisation du chainage
 	void reinitialisation(Chainage & ch)
 	{
 		Maillon * pm;
@@ -229,11 +126,8 @@ namespace chainage
 			ch.tete=pm;
 		}
 		ch.queue=NULL;
-		ch.nb_elt=0;
+		nb_elt=0;
 	}
-	
-	/***************************************/
-	// Fonction de recherche du minimum
 	Maillon* min(Chainage ch)
 	{
 		Maillon * pm1;
@@ -250,15 +144,12 @@ namespace chainage
 		}
 		return pm2;
 	}
-	
-	/***************************************/
-	//Suppression du minimum
 	void supprMin(Chainage & ch)
 	{
 		Maillon * pmin;
 		Maillon * ps; // Le maillon que l'on désallouera
 		pmin=min(ch); // On cherche le plus petit élément
-		if (pmin->succ == NULL) // Si le plus petit élément est à la fin du chainage
+		if (pmin->succ = NULL) // Si le plus petit élément est à la fin du chainage
 		{
 			suppression(ch, ch.nb_elt); // On utilise la procédure supprimer
 		}
@@ -268,19 +159,15 @@ namespace chainage
 			pmin->elt=ps->elt; // On commence par copier l'élément du successseur
 			pmin->succ=ps->succ; // Puis on l'isole
 			delete ps; // Et enfin on le désalloue
-		}
 	}
-	
-	/***************************************/
-	//Insertion d'un maillon après le maillon contenant l'élément minimal
-	void insert_apres_min(Chainage & ch, int x)
+	void insert_après_min(Chainage & ch, int x)
 	{
 		Maillon * pmin;
 		Maillon * pm=new Maillon; // Le nouveau maillon
 		pmin=min(ch); // On cherche le plus petit élément
-		if (pmin->succ == NULL) // Si le plus petit élément est à la fin du chainage
+		if (pmin->succ = NULL) // Si le plus petit élément est à la fin du chainage
 		{
-			insertQueue(ch,x); // Alors on l'insert à la dernière position
+			insertion(ch, nb_elt); // Alors on l'insert à la dernière position
 		}
 		else // Sinon
 		{
@@ -288,11 +175,8 @@ namespace chainage
 			pm->succ=pmin->succ; // Son successeur
 			pmin->succ=pm; // Et on met à jour le successeur de pmin
 		}
-		ch.nb_elt=ch.nb_elt+1; // Mise à jour du nombre d'élément dans le chainage
+		nb_elt=nb_elt+1; // Mise à jour du nombre d'élément dans le chainage
 	}
-	
-	/***************************************/
-	//Insertion d'un maillon avant le maillon contenant l'élément minimal
 	void insert_avant_min(Chainage & ch, int x)
 	{
 		Maillon * pmin;
@@ -300,9 +184,6 @@ namespace chainage
 		insert_apres_min(ch, pmin->elt); // On le ré-insert après lui-même
 		pmin->elt=x; // On met à jour avec la valeur demandée
 	}
-	
-	/***************************************/
-	// Fonction finale
 	void finalisation(Chainage & ch)
 	{
 	}
