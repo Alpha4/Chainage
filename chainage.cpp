@@ -106,6 +106,20 @@ namespace chainage
 	}
 	
 	/***************************************/
+	// Cette fonction renvoie la position dans le chainage du maillon donné
+	int position(Chainage ch, Maillon * pm)
+	{
+		int pos=1;
+		Maillon * pm1=ch.tete;
+		while (pm1!=pm)
+		{
+			pos=pos+1;
+			pm1=pm1->succ;
+		}
+		return pos;
+	}
+	
+	/***************************************/
 	// Cette fonction insert un élément après la position donnée
 	void insertion(Chainage & ch, int elem, int pos)
 	{
@@ -159,7 +173,7 @@ namespace chainage
 	// Insertion en queue
 	void insertQueue(Chainage & ch, int elt)
 	{
-		insertion(ch, ch.nb_elt, elt);
+		insertion(ch,elt,ch.nb_elt);
 	}
 	
 	/***************************************/
@@ -207,7 +221,6 @@ namespace chainage
 			afficheRec(pm->succ);
 			cout << " | " << pm->elt;
 		}
-		cout << " |" << endl;
 	}
 	
 	/***************************************/
@@ -226,8 +239,9 @@ namespace chainage
 				cout << " | " << pos;
 				pos=pos-1;
 			}
-			cout << " |" << endl;
+			cout << " | " << endl;
 			afficheRec(ch.tete);
+			cout << " |" << endl;
 		}
 	}
 	
@@ -256,11 +270,11 @@ namespace chainage
 		pm2=ch.tete;
 		while (pm1 != NULL)
 		{
-			pm1=pm1->succ;
 			if (pm1->elt < pm2->elt)
 			{
 				pm2=pm1;
 			}
+			pm1=pm1->succ;
 		}
 		return pm2;
 	}

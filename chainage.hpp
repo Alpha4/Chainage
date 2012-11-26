@@ -24,7 +24,8 @@ namespace chainage
 		
 	void initialisation(Chainage & ch);
 	Maillon * conversion(Chainage ch,int pos);
-	Maillon* Queue(Chainage ch);
+	int position(Chainage ch, Maillon * pm);
+	Maillon * Queue(Chainage ch);
 	void reinitialisation(Chainage & ch);
 	void finalisation(Chainage & ch);
 	
@@ -44,10 +45,10 @@ namespace chainage
 	void supprQueue(Chainage & ch);
 	
 	//Recherche
-	Maillon* recherche(Chainage ch, int x);
+	Maillon * recherche(Chainage ch, int x);
 	
 	//Fonctions autour du plus petit élément
-	Maillon* min(Chainage ch);
+	Maillon * min(Chainage ch);
 	void supprMin(Chainage & ch);
 	void insert_apres_min(Chainage & ch, int x);
 	void insert_avant_min(Chainage & ch, int x);
