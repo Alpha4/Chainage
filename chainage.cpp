@@ -66,7 +66,7 @@ namespace chainage
 	void affichage(Chainage ch)
 	{
 		int pos=1; //position
-		while (pos<ch.nb_elt+1) // On parcourt la chaine en partant de la tête
+		while (pos<ch.nb_elt+1) 
 			{
 				cout << " | " << pos;
 				pos=pos+1;
@@ -214,7 +214,21 @@ namespace chainage
 	//Fonction d'affichage inverse
 	void afficheInverse(Chainage ch)
 	{
-		afficheRec(ch.tete);
+		if (ch.nb_elt==0)
+		{
+			cout << "Le chaînage est vide" << endl;
+		}
+		else
+		{
+			int pos=ch.nb_elt; //position
+			while (pos>0) 
+			{
+				cout << " | " << pos;
+				pos=pos-1;
+			}
+			cout << " |" << endl;
+			afficheRec(ch.tete);
+		}
 	}
 	
 	/***************************************/
