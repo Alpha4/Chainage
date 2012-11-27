@@ -7,8 +7,8 @@ using namespace chainage;
 int main()
 {
 	Chainage ch;
-	int elt, pos, choix;
-	Maillon * pm;
+	int elt, pos, choix; // elt : élément recherché ou à insérer ; pos : position à laquelle s'effectue l'action (suppression, insertion, ...) ; choix : utilisé pour le menu
+	Maillon * pm; // Pointe vers le maillon recherché
 
 	initialisation(ch);
 	do
@@ -28,7 +28,8 @@ int main()
 		cout << "10 : Supprimer le minimum" << endl;
 		cout << "11 : Insertion avant le minimum" << endl;
 		cout << "12 : Insertion après le minimum" << endl;
-		cout << "13 : Terminer" << endl;
+		cout << "13 : Réinitialisation du chainage" << endl;		
+		cout << "14 : Terminer" << endl;
 		cin >> choix;
 		cout << "************************" << endl;
 
@@ -86,13 +87,13 @@ int main()
 				cout << "Quel élément recherchez vous ?" << endl;
 				cin >> elt; // Récupération de l'élément
 				pm=recherche(ch,elt);
-				if (pm==NULL)
+				if (pm!=NULL)
 				{
-					cout << "L'élément n'est pas présent dans le chainage" << endl;
+					cout << "L'élément recherché se situe dans le maillon en position " << position(ch,pm) << endl;
 				}
 				else
 				{
-					cout << "L'élément recherché se situe dans le maillon en position " << position(ch,pm) << endl;
+					cout << "L'élément n'est pas présent dans le chainage" << endl;
 				}
 			break;
 
@@ -122,9 +123,14 @@ int main()
 				insert_apres_min(ch,elt);
 			break;
 			
+			case 13:
+				reinitialisation(ch);
+				cout << "Le chainage a été réinitialisé au vide" << endl;
+			break;
+			
 			default:
 				finalisation(ch);
 			break;
 		}
-	}while (choix > 0 && choix < 13);
+	}while (choix > 0 && choix < 14);
 }

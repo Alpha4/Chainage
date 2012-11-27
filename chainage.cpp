@@ -39,18 +39,18 @@ namespace chainage
 				
 				if (i==0) // cas du premier maillon
 				{
-					ch.tete=&*pm; // mise à jour de la tête
+					ch.tete=pm; // mise à jour de la tête
 				}
 				else if (i==ch.nb_elt-1) // cas du dernier maillon
 				{
-					ch.queue=&*pm; //mise à jour de la queue
-					pred->succ=&*pm; // cas global nécessaire
+					ch.queue=pm; //mise à jour de la queue
+					pred->succ=pm; // cas global nécessaire
 				}
 				else  // cas global
 				{
-					pred->succ=&*pm; // le pointeur succ du précédent maillon 	initialisé est mis à jour avec le pointeur pm
+					pred->succ=pm; // le pointeur succ du précédent maillon 	initialisé est mis à jour avec le pointeur pm
 				}
-				pred=&*pm; // on stocke le pointeur du maillon créé pour mettre à jour son successeur au passage suivant dnas la boucle.
+				pred=pm; // on stocke le pointeur du maillon créé pour mettre à jour son successeur au passage suivant dnas la boucle.
 			}
 		}
 		else
@@ -129,6 +129,10 @@ namespace chainage
 		{
 			nouveau->succ=ch.tete;
 			ch.tete=nouveau;
+			if (nb_elt==0)
+			{
+				ch.queue=nouveau;
+			}
 		}
 		else
 		{
@@ -136,6 +140,10 @@ namespace chainage
 			pm=conversion(ch,pos);
 			nouveau->succ=pm->succ;
 			pm->succ=nouveau;
+			if (pm==ch.queue)
+			{
+				ch.queue=nouveau;
+			}
 		}
 		ch.nb_elt=ch.nb_elt+1;
 	}
@@ -144,22 +152,31 @@ namespace chainage
 	//Fonction de suppression du maillon à la position donnée
 	void suppression(Chainage &  ch, int pos)
 	{
-		
-		Maillon * pm;
-		if(pos==1) //suppression en tête
+		if (ch.tete!=NULL) // on test si le chainage n'est pas vide
 		{
-			pm=ch.tete;
-			ch.tete=ch.tete->succ;
+			Maillon * pm;
+			if(pos==1) //suppression en tête
+			{
+				pm=ch.tete;
+				ch.tete=ch.tete->succ;
+			}
+			else
+			{
+				Maillon * pred=conversion(ch,pos-1);
+				pm=pred->succ;
+				pred->succ=pm->succ;
+				if (pm==ch.queue)
+				{
+					ch.queue=pred;
+				}
+			}
+			delete pm;
+			ch.nb_elt-=1;	
 		}
 		else
 		{
-			Maillon * pred=conversion(ch,pos-1);
-			pm=pred->succ;
-			pred->succ=pm->succ;
-			
+			cout << "Suppression impossible dans un chainage vide" << endl;
 		}
-		delete pm;
-		ch.nb_elt-=1;	
 	}
 	
 	/***************************************/
@@ -203,10 +220,11 @@ namespace chainage
 	//Fonction renvoyant le premier maillon dans lequel se situe l'élément donné
 	Maillon* recherche(Chainage ch, int x)
 	{
-		Maillon * res = new Maillon;
+		Maillon * res;
 		res=ch.tete;
 		while (res != NULL && res->elt != x)
 		{
+		
 			res=res->succ;
 		}
 		return res;
@@ -264,19 +282,19 @@ namespace chainage
 	// Fonction de recherche du minimum
 	Maillon* min(Chainage ch)
 	{
-		Maillon * pm1;
-		Maillon * pm2;
-		pm1=ch.tete;
-		pm2=ch.tete;
-		while (pm1 != NULL)
+		Maillon * pm;
+		Maillon * pmin;
+		pm=ch.tete;
+		pmin=ch.tete;
+		while (pm != NULL)
 		{
-			if (pm1->elt < pm2->elt)
+			if (pm->elt < pmin->elt)
 			{
-				pm2=pm1;
+				pmin=pm;
 			}
-			pm1=pm1->succ;
+			pm=pm->succ;
 		}
-		return pm2;
+		return pmin;
 	}
 	
 	/***************************************/
